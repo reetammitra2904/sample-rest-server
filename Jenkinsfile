@@ -22,9 +22,9 @@ pipeline {
             }
         }
         stage('Push Docker Image') {
-//             when {
-//                 expression{ return env.BRANCH_NAME == 'main' }
-//             }
+            when {
+                expression{ return env.BRANCH_NAME == 'main' }
+            }
             steps {
                 withCredentials([usernamePassword(credentialsId: 'dockerhub-credentials', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) {
                     sh "docker login -u ${USERNAME} -p ${PASSWORD}"
@@ -35,9 +35,9 @@ pipeline {
             }
         }
         stage('Deploy to Docker Host') {
-//             when {
-//                 expression { return env.BRANCH_NAME == 'main' }
-//             }
+            when {
+                expression { return env.BRANCH_NAME == 'main' }
+            }
             steps {
                 sh """
                     docker stop sample-rest-server || true
