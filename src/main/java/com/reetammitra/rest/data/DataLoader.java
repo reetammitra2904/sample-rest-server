@@ -2,6 +2,8 @@ package com.reetammitra.rest.data;
 
 import com.reetammitra.rest.model.Person;
 import jakarta.annotation.PostConstruct;
+import org.springframework.retry.annotation.Recover;
+import org.springframework.retry.annotation.Retryable;
 import org.springframework.stereotype.Component;
 
 import java.io.BufferedReader;
@@ -10,6 +12,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
 @Component
 public class DataLoader {
@@ -36,7 +39,19 @@ public class DataLoader {
         }
     }
 
+    @Retryable(retryFor = RuntimeException.class)
     public Person getPerson(int id) {
-        return personMap.get(id);
+        System.out.println("Getting person for id: " + id);
+        Person person = personMap.get(id);
+        if (Objects.isNull(person)) {
+            throw new RuntimeException();
+        }
+        return person;
+    }
+
+    @Recover
+    public Person recover(RuntimeException e) {
+        System.out.println("Returning null");
+        return null;
     }
 }
