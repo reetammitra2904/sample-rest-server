@@ -6,7 +6,6 @@ pipeline {
     stages {
         stage('Checkout') {
             steps {
-                echo env.BRANCH_NAME
                 git branch: 'main', url: 'git@github.com:reetammitra2904/sample-rest-server.git'
             }
         }
@@ -23,9 +22,6 @@ pipeline {
             }
         }
         stage('Push Docker Image') {
-            when {
-                branch 'main'
-            }
             steps {
                 withCredentials([usernamePassword(credentialsId: 'dockerhub-credentials', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) {
                     sh "docker login -u ${USERNAME} -p ${PASSWORD}"
@@ -36,9 +32,6 @@ pipeline {
             }
         }
         stage('Deploy to Docker Host') {
-            when {
-                branch 'main'
-            }
             steps {
                 sh """
                     docker stop sample-rest-server || true
