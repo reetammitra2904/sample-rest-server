@@ -6,6 +6,7 @@ pipeline {
     stages {
         stage('Checkout') {
             steps {
+                echo env.BRANCH_NAME
                 git branch: 'main', url: 'git@github.com:reetammitra2904/sample-rest-server.git'
             }
         }
