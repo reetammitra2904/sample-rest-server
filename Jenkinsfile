@@ -35,7 +35,6 @@ pipeline {
             }
         }
         stage('Deploy to Docker Host') {
-            echo env.BRANCH_NAME
             when {
                 expression { return env.BRANCH_NAME == 'main' }
             }
