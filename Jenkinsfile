@@ -23,7 +23,7 @@ pipeline {
         }
         stage('Push Docker Image') {
             when {
-                expression{ return env.BRANCH_NAME == 'main' }
+                branch 'main'
             }
             steps {
                 withCredentials([usernamePassword(credentialsId: 'dockerhub-credentials', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) {
@@ -36,7 +36,7 @@ pipeline {
         }
         stage('Deploy to Docker Host') {
             when {
-                expression { return env.BRANCH_NAME == 'main' }
+                branch 'main'
             }
             steps {
                 sh """
